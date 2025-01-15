@@ -1,6 +1,7 @@
 import pygame
 import time
 import sys
+import math
 
 # Pygame setup
 pygame.init
@@ -12,7 +13,7 @@ WHITE = (255,255,255)
 BLACK = (0,0,0)
 LIGHT_WHITE = (238,238,210)
 LIGHT_BLACK = (70,70,70)
-HIGHLIGHTED_SQUARE = (238,238,190)
+HIGHLIGHTED_SQUARE = (255,182,193)
 
 SQUARE_SIZE = 100
 
@@ -88,13 +89,12 @@ def handle_click():
     mouse_x, mouse_y = pygame.mouse.get_pos()
 
     # Calculate the clicked row and column
-    clicked_row = mouse_x
-    clicked_col = mouse_y
+    clicked_row = math.ceil(mouse_y / SQUARE_SIZE)-1
+    clicked_col = math.floor(mouse_x / SQUARE_SIZE)
 
     # If a square is clicked, select the piece if it's there
     if board[clicked_row][clicked_col] != ".":
-        selected_square = (clicked_row/SQUARE_SIZE,clicked_col/SQUARE_SIZE)
-
+        selected_square = (clicked_row,clicked_col)
 
 
 # main game loop
@@ -107,6 +107,8 @@ def main():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                handle_click()  # Call handle_click when mouse is clicked
         
         draw_board()  # Draw the chessboard and pieces
         pygame.display.flip()  # Update the display
